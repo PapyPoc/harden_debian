@@ -5,6 +5,7 @@
 # - Met à jour /etc/resolv.conf (avec gestion de resolvconf/systemd-resolved)
 # - Recrée /etc/ssh/sshd_config depuis zéro (avec backup horodaté)
 # - Ajoute une clé SSH dans le compte appelant (SUDO_USER)
+# - L'utilisateur appelant ce script doit faire partie du groupe SUDO
 # ============================================================================
 set -euo pipefail
 
