@@ -49,7 +49,7 @@ Script Bash pour **Debian uniquement** permettant :
 
 ## 🛠️ Prérequis
 
--   Debian 11 ou 12
+-   Debian 12 ou 13
 -   `ifupdown`
 -   OpenSSH installé
 -   Exécution avec `sudo` ou en root
