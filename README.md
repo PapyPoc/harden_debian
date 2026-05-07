@@ -83,7 +83,7 @@ chmod +x harden_debian.sh
 ```
 ## Exécuter
 ```bash
-sudo ./setup.sh
+./harden_debian.sh
 ```
 # Vérifications après installation
 ## Vérifier le réseau
@@ -94,6 +94,7 @@ ip route
 ## Vérifier les DNS
 ```bash
 cat /etc/resolv.conf
+ping google.fr
 ```
 ## Vérifier SSH
 ```bash
@@ -138,4 +139,3 @@ Le script :
 Si la clé publique configurée est invalide ou absente :
 - le script stoppe automatiquement
 - aucune modification SSH n’est appliquée
-
