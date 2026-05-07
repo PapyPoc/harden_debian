@@ -1,141 +1,146 @@
-# 🔐 Debian Network & SSH Hardening Script
-
-Script Bash pour **Debian uniquement** permettant :
-
--   Configuration d'une IP statique (`/etc/network/interfaces`)
--   Configuration des DNS (`/etc/resolv.conf`)
--   Validation DNS avec rollback automatique
--   Recréation complète et sécurisation de `/etc/ssh/sshd_config`
--   Ajout automatique d'une clé publique SSH
--   Configuration idempotente et sécurisée
-
-------------------------------------------------------------------------
-
-## 📦 Fonctionnalités
-
-### 🌐 Réseau
-
--   Détection automatique de l'interface principale
--   Configuration IP statique
--   Conversion automatique CIDR → netmask
--   Redémarrage du service réseau
--   Backup automatique avant modification
-
-### 🌍 DNS
-
--   Mise à jour de `/etc/resolv.conf`
--   Support :
-    -   Écriture directe
-    -   `resolvconf`
-    -   `systemd-resolved`
--   Test automatique de résolution DNS
--   🔁 Rollback automatique si échec
-
-### 🔒 SSH Hardening
-
--   Backup horodaté de `sshd_config`
--   Recréation complète du fichier
--   Désactivation :
-    -   `PermitRootLogin`
-    -   `PasswordAuthentication`
-    -   `ChallengeResponseAuthentication`
--   Activation :
-    -   Authentification par clé uniquement
--   Validation avec `sshd -t`
--   Ajout sécurisé de la clé SSH dans le bon utilisateur
--   Permissions conformes OpenSSH (700 / 600)
-
-------------------------------------------------------------------------
-
-## 🛠️ Prérequis
-
--   Debian 12 ou 13
--   `ifupdown`
--   OpenSSH installé
--   Exécution avec `sudo` ou en root
-
-⚠️ Script **Debian uniquement** (pas Ubuntu / pas RHEL / pas
-NetworkManager).
-
-------------------------------------------------------------------------
-
-## ⚙️ Configuration
-
+# Debian Network + DNS + SSH Hardening Script
+## Description
+Ce script configure automatiquement une machine Debian avec :
+- Une IP statique via `ifupdown`
+- Les DNS système
+- Un durcissement SSH minimal
+- L’ajout automatique d’une clé publique SSH
+- La désactivation de l’authentification par mot de passe SSH
+Le script est prévu pour être exécuté **en console locale**.
+# Fonctionnalités
+## Réseau
+Configuration automatique de :
+- `/etc/network/interfaces`
+- Adresse IP statique
+- Gateway
+- DNS via :
+  - `resolvconf`
+  - `systemd-resolved`
+  - ou `/etc/resolv.conf`
+Backup automatique des fichiers modifiés.
+## SSH Hardening
+Le script :
+- Désactive `root`
+- Désactive l’authentification par mot de passe
+- Active uniquement l’authentification par clé
+- Limite les tentatives SSH
+- Désactive :
+  - X11Forwarding
+  - AgentForwarding
+  - TCP Forwarding
+  - Tunnel
+Validation automatique du fichier `sshd_config` avant redémarrage.
+# Pré-requis
+## Debian uniquement
+Compatible :
+- Debian 11
+- Debian 12
+- Debian 13
+Le script suppose l’utilisation de :
+- `ifupdown`
+- `openssh-server`
+- `systemd`
+# IMPORTANT
+## Exécution recommandée
+Exécuter :
+- en console locale
+- VM console
+- IPMI/iLO/DRAC
+Éviter une exécution distante SSH sans accès console.
+# Configuration
 Modifier les variables en haut du script :
+```bash
+STATIC_IP="10.0.0.202/24"
+GATEWAY="10.0.0.254"
 
-    STATIC_IP="10.0.0.202/24"
-    GATEWAY="10.0.0.254"
-    DNS_LIST=("10.0.0.254" "1.1.1.1")
-    SEARCH_DOMAINS=()
-    SSH_PORT="22"
-    CLE_SSH_P="ssh-ed25519 AAAAC3Nza..."
+DNS_LIST=("10.0.0.254" "1.1.1.1" "1.0.0.1")
 
-------------------------------------------------------------------------
+SEARCH_DOMAINS=("test.auvergneinfo.lan")
 
-## 🚀 Utilisation
+SSH_PORT="22"
 
-    chmod +x script.sh
-    sudo ./script.sh
+CLE_SSH_PUBLIC="ssh-ed25519 AAAA..."
+```
+# Clé SSH
+## Générer une clé
+Sous Linux :
+```bash
+ssh-keygen -t ed25519
+```
+## Récupérer la clé publique
 
-------------------------------------------------------------------------
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+## Exemple valide
+```bash
+CLE_SSH_PUBLIC="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG... user@host"
+```
+# Lancement
 
-## 🔍 Ce que fait le script
+## Rendre le script exécutable
 
-1.  Backup `/etc/network/interfaces`
-2.  Applique IP statique
-3.  Backup `/etc/resolv.conf`
-4.  Applique nouveaux DNS
-5.  Test DNS (`getent hosts google.com`)
-6.  Rollback automatique si échec
-7.  Backup `sshd_config`
-8.  Recréation complète config SSH
-9.  Validation `sshd -t`
-10. Restart SSH
+```bash
+chmod +x setup.sh
+```
 
-------------------------------------------------------------------------
+---
 
-## 🧪 Vérifications après exécution
+## Exécuter
 
-### Vérifier l'IP
+```bash
+sudo ./setup.sh
+```
+# Vérifications après installation
+## Vérifier le réseau
+```bash
+ip addr
+ip route
+```
+## Vérifier les DNS
+```bash
+cat /etc/resolv.conf
+```
+## Vérifier SSH
+```bash
+sshd -t
+systemctl status ssh
+```
+# Test SSH
+Tester une nouvelle connexion SSH avant fermeture de session :
+```bash
+ssh -p 22 user@10.0.0.202
+```
+ers sauvegardés
+## Réseau
+```bash
+/etc/network/interfaces.backup.*
+```
+## DNS
+```bash
+/etc/resolv.conf.backup.*
+```
+## SSH
+```bash
+/etc/ssh/sshd_config.backup.*
+```
+# Rollback manuel
+## Réseau
+```bash
+cp /etc/network/interfaces.backup.* /etc/network/interfaces
+systemctl restart networking
+```
+## SSH
+```bash
+cp /etc/ssh/sshd_config.backup.* /etc/ssh/sshd_config
+systemctl restart ssh
+```
+# Sécurité
+Le script :
+- désactive les mots de passe SSH
+- interdit le login root
+- impose les clés SSH
+Si la clé publique configurée est invalide ou absente :
+- le script stoppe automatiquement
+- aucune modification SSH n’est appliquée
 
-    ip a
-    ip route
-
-### Vérifier le DNS
-
-    cat /etc/resolv.conf
-    getent hosts google.com
-
-### Tester SSH (depuis une autre machine)
-
-    ssh -p 22 user@IP
-
-⚠️ **Ne fermez jamais votre session SSH actuelle avant validation.**
-
-------------------------------------------------------------------------
-
-## 🛡 Paramètres de sécurité appliqués
-
--   `PermitRootLogin no`
--   `PasswordAuthentication no`
--   `PubkeyAuthentication yes`
--   `MaxAuthTries 3`
--   `LoginGraceTime 30`
--   Désactivation du forwarding
--   Permissions SSH strictes :
-    -   `.ssh` → 700
-    -   `authorized_keys` → 600
-
-------------------------------------------------------------------------
-
-## 🔁 Idempotence
-
--   La clé SSH n'est pas dupliquée
--   Les backups sont horodatés
--   Les permissions sont corrigées si incorrectes
-
-------------------------------------------------------------------------
-
-## 📜 Licence
-
-MIT
