@@ -8,7 +8,7 @@ SEARCH_DOMAINS=("test.auvergneinfo.lan")
 SSH_PORT="22"
 
 # Remplace par ta vraie clé publique complète
-CLE_SSH_P="ssh-ed25519 AAAAC... steph@POC-PC"
+CLE_SSH_PUBLIC="ssh-ed25519 AAAAC... steph@POC-PC"
 
 die() {
   echo "ERREUR: $*" >&2
@@ -28,11 +28,11 @@ validate_ssh_key() {
   echo "=== Validation clé SSH publique ==="
   local tmpkey
   tmpkey="$(mktemp)"
-  echo "$CLE_SSH_P" > "$tmpkey"
+  echo "$CLE_SSH_PUBLIC" > "$tmpkey"
 
   if ! ssh-keygen -l -f "$tmpkey" >/dev/null 2>&1; then
     rm -f "$tmpkey"
-    die "Clé SSH publique invalide. Remplace CLE_SSH_P par une vraie clé publique complète."
+    die "Clé SSH publique invalide. Remplace CLE_SSH_PUBLIC par une vraie clé publique complète."
   fi
 
   rm -f "$tmpkey"
@@ -303,7 +303,7 @@ EOF
   chown "$TARGET_USER:$TARGET_GROUP" "$TARGET_HOME/.ssh/authorized_keys"
   chmod 600 "$TARGET_HOME/.ssh/authorized_keys"
 
-  grep -qxF "$CLE_SSH_P" "$TARGET_HOME/.ssh/authorized_keys" || echo "$CLE_SSH_P" >> "$TARGET_HOME/.ssh/authorized_keys"
+  grep -qxF "$CLE_SSH_P" "$TARGET_HOME/.ssh/authorized_keys" || echo "$CLE_SSH_PUBLIC" >> "$TARGET_HOME/.ssh/authorized_keys"
 
   SSHD_BIN="$(command -v sshd || true)"
   [ -n "$SSHD_BIN" ] || SSHD_BIN="/usr/sbin/sshd"
