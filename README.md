@@ -18,6 +18,7 @@ Configuration automatique de :
   - `resolvconf`
   - `systemd-resolved`
   - ou `/etc/resolv.conf`
+
 Backup automatique des fichiers modifiés.
 ## SSH Hardening
 Le script :
@@ -38,6 +39,7 @@ Compatible :
 - Debian 11
 - Debian 12
 - Debian 13
+
 Le script suppose l’utilisation de :
 - `ifupdown`
 - `openssh-server`
