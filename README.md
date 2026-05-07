@@ -50,6 +50,7 @@ Exécuter :
 - en console locale
 - VM console
 - IPMI/iLO/DRAC
+
 Éviter une exécution distante SSH sans accès console.
 # Configuration
 Modifier les variables en haut du script :
