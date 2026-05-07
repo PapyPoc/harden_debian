@@ -1,11 +1,12 @@
 # Debian Network + DNS + SSH Hardening Script
 ## Description
 Ce script configure automatiquement une machine Debian avec :
-- Une IP statique via `ifupdown`
+- Une IP statique
 - Les DNS système
 - Un durcissement SSH minimal
 - L’ajout automatique d’une clé publique SSH
 - La désactivation de l’authentification par mot de passe SSH
+
 Le script est prévu pour être exécuté **en console locale**.
 # Fonctionnalités
 ## Réseau
