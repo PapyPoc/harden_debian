@@ -77,16 +77,12 @@ cat ~/.ssh/id_ed25519.pub
 CLE_SSH_PUBLIC="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG... user@host"
 ```
 # Lancement
-
 ## Récupération du script
-
 ```bash
-wget https://raw.githubusercontent.com/USER/REPO/main/setup.sh
-chmod +x setup.sh
+wget https://raw.githubusercontent.com/PapyPoc/harden_debian/refs/heads/main/harden_debian.sh
+chmod +x harden_debian.sh
 ```
-
 ## Exécuter
-
 ```bash
 sudo ./setup.sh
 ```
