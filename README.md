@@ -78,13 +78,12 @@ CLE_SSH_PUBLIC="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG... user@host"
 ```
 # Lancement
 
-## Rendre le script exécutable
+## Récupération du script
 
 ```bash
+wget https://raw.githubusercontent.com/USER/REPO/main/setup.sh
 chmod +x setup.sh
 ```
-
----
 
 ## Exécuter
 
