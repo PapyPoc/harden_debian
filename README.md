@@ -57,14 +57,9 @@ Modifier les variables en haut du script :
 ```bash
 STATIC_IP="10.0.0.202/24"
 GATEWAY="10.0.0.254"
-
 DNS_LIST=("10.0.0.254" "1.1.1.1" "1.0.0.1")
-
 SEARCH_DOMAINS=("test.auvergneinfo.lan")
-
 SSH_PORT="22"
-
-CLE_SSH_PUBLIC="ssh-ed25519 AAAA..."
 ```
 # Clé SSH
 ## Générer une clé
@@ -73,7 +68,6 @@ Sous Linux :
 ssh-keygen -t ed25519
 ```
 ## Récupérer la clé publique
-
 ```bash
 cat ~/.ssh/id_ed25519.pub
 ```
@@ -111,7 +105,7 @@ Tester une nouvelle connexion SSH avant fermeture de session :
 ```bash
 ssh -p 22 user@10.0.0.202
 ```
-ers sauvegardés
+Fichiers sauvegardés
 ## Réseau
 ```bash
 /etc/network/interfaces.backup.*
@@ -140,6 +134,7 @@ Le script :
 - désactive les mots de passe SSH
 - interdit le login root
 - impose les clés SSH
+
 Si la clé publique configurée est invalide ou absente :
 - le script stoppe automatiquement
 - aucune modification SSH n’est appliquée
