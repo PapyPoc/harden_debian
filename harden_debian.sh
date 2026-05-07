@@ -1,4 +1,4 @@
-#!/bin/bash
+ #!/bin/bash
 set -euo pipefail
 
 STATIC_IP="10.0.0.202/24"
@@ -303,7 +303,7 @@ EOF
   chown "$TARGET_USER:$TARGET_GROUP" "$TARGET_HOME/.ssh/authorized_keys"
   chmod 600 "$TARGET_HOME/.ssh/authorized_keys"
 
-  grep -qxF "$CLE_SSH_P" "$TARGET_HOME/.ssh/authorized_keys" || echo "$CLE_SSH_PUBLIC" >> "$TARGET_HOME/.ssh/authorized_keys"
+  grep -qxF "$CLE_SSH_PUBIC" "$TARGET_HOME/.ssh/authorized_keys" || echo "$CLE_SSH_PUBLIC" >> "$TARGET_HOME/.ssh/authorized_keys"
 
   SSHD_BIN="$(command -v sshd || true)"
   [ -n "$SSHD_BIN" ] || SSHD_BIN="/usr/sbin/sshd"
