@@ -4,7 +4,7 @@ set -euo pipefail
 STATIC_IP="10.0.0.202/24"
 GATEWAY="10.0.0.254"
 DNS_LIST=("10.0.0.254" "1.1.1.1" "1.0.0.1")
-SEARCH_DOMAINS=("test.auvergneinfo.lan")
+SEARCH_DOMAINS=("auvergneinfo.lan")
 SSH_PORT="22"
 
 # Remplace par ta vraie clé publique complète
